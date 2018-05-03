@@ -1,0 +1,78 @@
+{
+  "date_detection": false,
+  "numeric_detection": false,
+  "dynamic_templates": [
+    {
+      "boolean": {
+        "match": "*__bool",
+        "mapping": {
+          "type": "boolean",
+          "fields": {
+            "raw": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    },
+    {
+      "long": {
+        "match": "*__long",
+        "mapping": {
+          "type": "long",
+          "fields": {
+            "raw": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    },
+    {
+      "number": {
+        "match": "*__num",
+        "mapping": {
+          "type": "double",
+          "fields": {
+            "raw": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    },
+    {
+      "map__indexed": {
+        "match": "*__map",
+        "mapping": {
+          "type": "object",
+          "dynamic": "true"
+        }
+      }
+    },
+    {
+      "map__not_indexed": {
+        "match": "*",
+        "match_mapping_type": "object",
+        "mapping": {
+          "type": "object",
+          "dynamic": "false"
+        }
+      }
+    },
+    {
+      "string__all": {
+        "match": "*",
+        "mapping": {
+          "type": "text",
+          "fields": {
+            "raw": {
+              "type": "keyword"
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+

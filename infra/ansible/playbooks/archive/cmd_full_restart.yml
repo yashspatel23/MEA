@@ -1,0 +1,101 @@
+- hosts: scraps__001
+
+  tasks:
+    # ------------------------
+    # ubuntu
+    # ------------------------
+ 
+    # logs directory
+    - name: logs directory
+      file: path=/home/ubuntu/scraps/logs state=directory
+      become: yes
+      become_user: ubuntu
+    
+    # git pull scraps
+    - name: Git Pull from git@github.com:jinfwhuang/scraps.git
+      shell: cd /home/ubuntu/scraps && git pull
+      become: yes
+      become_user: ubuntu
+      
+    # git pull scraps-recycler
+    - name: Git Pull from git@github.com:jinfwhuang/scraps-recycler.git
+      shell: cd /home/ubuntu/scraps-recycler && git pull
+      become: yes
+      become_user: ubuntu
+      
+    # copy: scraps/credentialed_conf/
+    - name: copy scraps/credentialed_conf/
+      copy:
+        src: /Users/jin/Dropbox/git-jin/scraps/credentialed_conf
+        dest: /home/ubuntu/scraps
+        mode: 0666
+        force: yes
+        owner: ubuntu
+        group: ubuntu
+      become: yes
+      become_user: ubuntu
+    
+    # copy: scraps-recycler/credentialed_conf/
+    - name: copy scraps-recycler/credentialed_conf/
+      copy:
+        src: /Users/jin/Dropbox/git-jin/scraps-recycler/credentialed_conf
+        dest: /home/ubuntu/scraps-recycler
+        mode: 0666
+        force: yes
+        owner: ubuntu
+        group: ubuntu
+      become: yes
+      become_user: ubuntu
+    
+#     - name: staticfiles
+#       shell: cd /home/ubuntu/scraps/scraps && source ../credentialed_conf/env && python manage.py collectstatic --clear --noinput
+#       args:
+#         executable: /bin/bash
+#       become: yes
+#       become_user: ubuntu
+#     
+    # ------------------------
+    # root
+    # ------------------------
+    # supervisor confifguration file
+    - name: supervisor confifguration file
+      copy:
+        src: /Users/jin/Dropbox/git-jin/scraps/credentialed_conf/supervisord__main.conf
+        dest: /etc/supervisor/supervisord.conf
+        mode: 0644
+        force: yes
+        owner: root
+        group: root
+    
+#     # elasticsearch confifguration file
+#     - name: elasticsearch confifguration file
+#       copy:
+#         src: /Users/jin/Dropbox/git-jin/scraps/credentialed_conf/elasticsearch.yml
+#         dest: /etc/elasticsearch/elasticsearch.yml
+#         mode: 0644
+#         force: yes
+#         owner: root
+#         group: root
+    
+    # python dependencies
+    - name: python | pip requirements.txt
+      pip:
+        requirements=/home/ubuntu/scraps/requirements.txt
+    
+    - name: staticfiles
+      shell: cd /home/ubuntu/scraps/scraps && source ../credentialed_conf/env && python manage.py collectstatic --clear --noinput
+      args:
+        executable: /bin/bash
+    
+#     # supervisord restart
+#     - name: Restart elasticsearch
+#       service: name=elasticsearch state=started
+
+    # # supervisord program restart
+    # - name: Restart scraps
+    #   shell: supervisorctl restart uwsgi
+    
+    # supervisord restart
+    - name: Restart supervisor
+      service: name=supervisor state=restarted
+

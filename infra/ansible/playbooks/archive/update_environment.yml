@@ -1,0 +1,30 @@
+- hosts: scraps__001
+
+  tasks:
+    # ------------------------
+    # ubuntu
+    # ------------------------
+    
+    # copy: scraps/credentialed_conf/
+    - name: copy scraps/credentialed_conf/
+      copy:
+        src: /Users/jin/Dropbox/git-jin/scraps/credentialed_conf
+        dest: /home/ubuntu/scraps
+        mode: 0666
+        force: yes
+        owner: ubuntu
+        group: ubuntu
+      become: yes
+      become_user: ubuntu
+    
+    # copy: scraps-recycler/credentialed_conf/
+    - name: copy scraps-recycler/credentialed_conf/
+      copy:
+        src: /Users/jin/Dropbox/git-jin/scraps-recycler/credentialed_conf
+        dest: /home/ubuntu/scraps-recycler
+        mode: 0666
+        force: yes
+        owner: ubuntu
+        group: ubuntu
+      become: yes
+      become_user: ubuntu

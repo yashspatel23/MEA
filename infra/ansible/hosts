@@ -1,0 +1,19 @@
+# jumper_host ansible_port=5555 ansible_host=192.0.2.50 ansible_ssh_private_key_file=conf_credentialed/arb_jin.pem
+
+#[appservers]
+#www[01:50].example.com
+
+#arb__001                    ansible_ssh_private_key_file=conf_credentialed/arb_jin.pem    ansible_ssh_user=ubuntu
+#arb__elasticsearch__001     ansible_ssh_private_key_file=conf_credentialed/arb_jin.pem    ansible_ssh_user=ubuntu
+
+#arb_app__001    ansible_ssh_user=ubuntu
+#arb_data__001   ansible_ssh_user=ubuntu
+
+
+[appservers]
+arb_app__001
+
+
+[dataservers]
+arb_data__001
+

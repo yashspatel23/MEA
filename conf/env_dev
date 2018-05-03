@@ -1,0 +1,31 @@
+export SERVER_HOST=0.0.0.0
+export SERVER_PORT=5000
+export SERVER_DEBUG=True  ###
+export BACKEND_ES_HOST=localhost ###
+export BACKEND_ES_PORT=19200  ###
+
+export APP_NAME='arb'
+export LOG_FILE_NAME='arb.log'
+
+export TWILIO_ACCOUNT='xxxx'
+export TWILIO_TOKEN='yyy'
+
+# fff is not valid
+export SENTRY_URL='https://fffa491daa6049fe901e25dc379cc365:b130809acabb4f03b2a6bce5428f6751@sentry.io/217667'
+
+# ------------------------
+# Crypto Accounts
+# ------------------------
+#
+# Only for mock trading
+#
+
+export GDAX_API_URL='https://api.gdax.com'
+export GDAX_API_KEY=''
+export GDAX_API_SECRET=''
+export GDAX_API_PASSPHRASE=''
+
+export CEX_API_URL='https://cex.io/api'
+export CEX_API_USER_ID=''
+export CEX_API_KEY=''
+export CEX_API_SECRET=''

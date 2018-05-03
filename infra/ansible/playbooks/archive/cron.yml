@@ -1,0 +1,14 @@
+- hosts: scraps__001
+
+  tasks:
+    # ------------------------
+    # root
+    # ------------------------
+    - name: copy /etc/crontab
+      copy:
+        src: /Users/jin/Dropbox/git-jin/scraps/conf/crontab
+        dest: /etc/crontab
+        mode: 0644
+        force: yes
+        owner: root
+        group: root

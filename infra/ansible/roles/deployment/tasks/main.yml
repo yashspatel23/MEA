@@ -1,0 +1,83 @@
+# ------------------
+# Deploy
+# ------------------
+
+# minor setups
+- name: deploy dirs
+  tags: deploy
+  file: path="{{ remote_home_dir }}/{{ item }}" state=directory
+  with_items:
+    - 'deploy'
+    - 'logs'
+    - 'pids'
+
+
+- name: git
+  tags: deploy
+  git:
+    repo: git@github.com:yashspatel23/arb.git
+    dest: "{{ remote_home_dir }}"
+    version: master
+    accept_hostkey: true
+
+
+- name: upload supervisord config
+  tags: deploy
+  copy:
+    src: ./production/supervisord.conf
+    dest: "{{ remote_home_dir }}/deploy/supervisord.conf"
+    mode: 0666
+    force: yes
+    owner: ubuntu
+    group: ubuntu
+  become: yes
+  become_user: root
+
+  # kick off reread and restart supervisord
+  notify:
+    - reread--deploy/supervisord.conf
+
+
+- name: upload production/deploy files
+  tags: deploy
+  copy:
+    src: ./production/
+    dest: "{{ remote_home_dir }}/deploy"
+    mode: 0666
+    force: yes
+    owner: ubuntu
+    group: ubuntu
+
+
+- name: credentialed_conf
+  tags: deploy
+  copy:
+    src: "{{ local_conf_credentialed }}"
+    dest: "{{ remote_home_dir }}"
+    mode: 0666
+    force: yes
+    owner: ubuntu
+    group: ubuntu
+  become: yes
+  become_user: ubuntu
+
+#  # TODO: maybe it needs to kick off program tasks reload/restart
+#  notify:
+#    - reread deploy/supervisord.conf
+
+
+- name: pip
+  tags: deploy
+  pip:
+    requirements="{{ remote_home_dir }}/requirements.txt"
+  become: yes
+  become_user: root
+
+
+- name: restart supervisord
+  tags: deploy
+  shell: "echo restarting supervisord"
+  when:
+    - restart_all == "yes"
+  notify:
+    - restart--supervisord

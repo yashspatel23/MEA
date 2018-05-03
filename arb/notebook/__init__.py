@@ -1,0 +1,5 @@
+MODEL_KEY_RE_PATTERN__BOOL = '__bool$'
+MODEL_KEY_RE_PATTERN__INT = '__int$'
+MODEL_KEY_RE_PATTERN__NUM = '__num$'
+MODEL_KEY_RE_PATTERN__MAP = '__map$'
+

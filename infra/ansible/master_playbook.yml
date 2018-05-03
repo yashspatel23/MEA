@@ -1,0 +1,8 @@
+- hosts: appservers
+  roles:
+    - common
+    - deployment
+
+- hosts: dataservers
+  roles:
+    - common

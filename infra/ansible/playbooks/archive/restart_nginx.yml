@@ -1,0 +1,19 @@
+- hosts: scraps__001
+
+  tasks:
+    # ------------------------
+    # root
+    # ------------------------
+    - name: copy /etc/nginx
+      copy:
+        src: /Users/jin/Dropbox/git-jin/scraps/credentialed_conf/nginx.conf
+        dest: /etc/nginx/nginx.conf
+        mode: 0644
+        force: yes
+        owner: root
+        group: root
+    
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted

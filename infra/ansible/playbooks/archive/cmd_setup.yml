@@ -1,0 +1,109 @@
+- hosts: scraps__001
+
+  vars:
+    home_dir: /home/ubuntu
+
+  tasks:
+
+    # - copy:
+    #     src: conf
+    #     dest: /home/ubuntu
+    #     mode: 0666
+    #     force: yes
+    #     owner: ubuntu
+    #     group: ubuntu
+
+    # shell commands
+    - shell: apt-get update
+
+    # ngix
+    - name: nginx | install nginx
+      apt:
+        pkg: nginx
+        state: installed
+        update_cache: true
+
+    - name: nginx | stop nginx
+      service:
+        name: nginx
+        state: stopped
+
+    # java
+    - name: Install add-apt-repostory
+      apt: name=software-properties-common state=latest
+
+    - name: Add Oracle Java Repository
+      apt_repository: repo='ppa:webupd8team/java'
+
+    - name: Accept Java 8 License
+      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+
+    - name: Install Oracle Java 8
+      apt: name={{item}} state=latest
+      with_items:
+        - oracle-java8-installer
+        - ca-certificates
+        - oracle-java8-set-default
+
+    # basic packages
+    - name: install apt-get packages
+      action: apt pkg={{item}} state=latest install_recommends=true force=true
+      with_items:
+        - emacs
+        - realpath
+        - git
+        - tree
+        - htop
+        - autoconf
+        - build-essential
+        - gcc
+        - gfortran
+        - graphviz
+        - idle-python2.7
+        - libgle3
+        - libqt4-dbus
+        - libqt4-network
+        - libqt4-script
+        - libqt4-test
+        - libqt4-xml
+        - libqtcore4
+        - libqtgui4
+        - libtool
+        - pkg-config
+        - python-setuptools
+        - python-pip
+        - python-dev
+        - python-imaging
+        - python-lxml
+        - python-numpy
+        - python-opengl
+        - python-pip
+        - python-pyrex
+        - python-pyside.qtopengl
+        - python-qt4
+        - python-qt4-gl
+        - python-scipy
+        - python-zmq
+        - qt4-designer
+        - qt4-dev-tools
+        - swig
+        - libfreetype6-dev
+        - libxft-dev
+        - libmysqlclient-dev
+        - mysql-client
+        - supervisor
+        - maven
+
+
+    # # python
+    # - name: python | pip requirements.txt
+    #   pip:
+    #     requirements={{home_dir}}/conf/requirements.txt
+
+
+# - name: NGINX | Starting NGINX
+#   service:
+#     name: nginx
+#     state: started
+
+

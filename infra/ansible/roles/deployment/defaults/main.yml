@@ -1,0 +1,4 @@
+local_conf_credentialed: /Users/jin/code/work/arb/conf_credentialed
+remote_home_dir: /home/ubuntu/arb
+
+restart_all: no

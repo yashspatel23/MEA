@@ -1,0 +1,147 @@
+- hosts: arb_app__001
+  vars:
+    home_dir: /home/ubuntu
+    pub_keys_jin: https://github.com/jinfwhuang.keys
+    pub_keys_yash: https://github.com/yashspatel23.keys
+    pub_keys_saureen: https://github.com/samonderous.keys
+
+    local_files: files/elasticsearch
+    remote_files: /home/ubuntu/files
+    remote_elasticsearch_config: /etc/elasticsearch
+
+  tasks:
+    # -------------------
+    # init
+    # -------------------
+
+    - name: jin's pub key
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: "{{ pub_keys_jin }}"
+      tags: init,keys
+
+    - name: yash's pub key
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: "{{ pub_keys_yash }}"
+      tags: init,keys
+
+    - name: saureen's pub key
+      authorized_key:
+        user: ubuntu
+        state: present
+        key: "{{ pub_keys_saureen }}"
+      tags: init,keys
+
+
+    - name: apt-get update
+      shell: apt-get update
+      become: yes
+      become_user: root
+      tags: init
+
+    - name: installing repo for Java 8 in Ubuntu
+      apt_repository: repo='ppa:openjdk-r/ppa'
+
+    - name: install apt-get packages
+      action: apt pkg={{item}} state=latest install_recommends=true force=true
+      with_items:
+        - emacs
+        - realpath
+        - git
+        - tree
+        - htop
+        - autoconf
+        - build-essential
+        - gcc
+        - gfortran
+        - graphviz
+        - idle-python2.7
+        - libgle3
+        - libqt4-dbus
+        - libqt4-network
+        - libqt4-script
+        - libqt4-test
+        - libqt4-xml
+        - libqtcore4
+        - libqtgui4
+        - libtool
+        - pkg-config
+        - qt4-designer
+        - qt4-dev-tools
+        - swig
+        - libfreetype6-dev
+        - libxft-dev
+        - libmysqlclient-dev
+        - supervisor
+      become: yes
+      become_user: root
+      tags: init
+
+    - name: Install add-apt-repostory
+      become: yes
+      become_user: root
+      apt: name=software-properties-common state=latest
+      tags: init
+
+    - name: Add Oracle Java Repository
+      become: yes
+      become_user: root
+      apt_repository: repo='ppa:webupd8team/java'
+      tags: init
+
+    - name: Accept Java 8 License
+      become: yes
+      become_user: root
+      debconf: name='oracle-java8-installer' question='shared/accepted-oracle-license-v1-1' value='true' vtype='select'
+      tags: init
+
+    - name: Install Oracle Java 8
+      become: yes
+      become_user: root
+      apt: name={{item}} state=latest
+      with_items:
+        - oracle-java8-installer
+        - ca-certificates
+        - oracle-java8-set-default
+      tags: init
+
+    # -------------------
+    # deploy
+    # -------------------
+    - name: files
+      copy:
+        src: "{{ local_files }}/"
+        dest: "{{ remote_files }}"
+        mode: 0666
+        force: yes
+        owner: ubuntu
+        group: ubuntu
+      become: yes
+      become_user: ubuntu
+      tags: deploy
+
+    - name: files
+      copy:
+        src: "{{ local_files }}/config/"
+        dest: "{{ remote_elasticsearch_config }}"
+        mode: 0666
+        force: yes
+      become: yes
+      become_user: root
+      tags: deploy
+
+#    - name: elasticsearch
+#      service: name=elasticsearch state=started
+#      become: yes
+#      become_user: root
+#      tags: deploy
+
+
+
+
+
+
+

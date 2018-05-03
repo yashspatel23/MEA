@@ -1,0 +1,33 @@
+vars:
+  task_name: stupid
+  remote_home_dir: /home/ubuntu/arb
+
+- name: upload supervisord config
+  copy:
+    src: ./production/supervisord.conf
+    dest: /etc/supervisor/supervisord.conf
+    mode: 0666
+    force: yes
+    owner: ubuntu
+    group: ubuntu
+  become: yes
+  become_user: root
+  tags: restart
+
+#- name: reread the configuration file
+#  shell: "supervisorctl -c deploy/supervisord.conf reread"
+#  args:
+#    chdir: "{{ remote_home_dir }}"
+#  become: yes
+#  become_user: root
+#  tags: restart
+#
+#- name: restart task
+#  shell: "supervisorctl -c deploy/supervisord.conf restart ""{{ task_name }}"
+#  args:
+#    chdir: "{{ remote_home_dir }}"
+#  become: yes
+#  become_user: root
+#  tags: restart
+
+

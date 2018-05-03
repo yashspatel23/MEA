@@ -1,0 +1,26 @@
+vars:
+  pub_keys_jin: https://github.com/jinfwhuang.keys
+  pub_keys_yash: https://github.com/yashspatel23.keys
+  pub_keys_saureen: https://github.com/samonderous.keys
+
+- name: jin's pub key
+  authorized_key:
+    user: ubuntu
+    state: present
+    key: "{{ pub_keys_jin }}"
+  tags: keys
+
+
+- name: yash's pub key
+  authorized_key:
+    user: ubuntu
+    state: present
+    key: "{{ pub_keys_yash }}"
+  tags: keys
+
+- name: saureen's pub key
+  authorized_key:
+    user: ubuntu
+    state: present
+    key: "{{ pub_keys_saureen }}"
+  tags: keys

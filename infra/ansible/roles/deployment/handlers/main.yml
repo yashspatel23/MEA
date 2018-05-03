@@ -1,0 +1,14 @@
+- name: reread--deploy/supervisord.conf
+  shell: "supervisorctl -c deploy/supervisord.conf reread && supervisorctl -c deploy/supervisord.conf update"
+  args:
+    chdir: "{{ remote_home_dir }}"
+  become: yes
+  become_user: root
+
+- name: restart--supervisord
+#  shell: ". conf_credentialed/env_prod && bash deploy/super_stop.sh && bash deploy/super_start.sh"
+  shell: "bash deploy/super_stop.sh && bash deploy/super_start.sh"
+  args:
+    chdir: "{{ remote_home_dir }}"
+  become: yes
+  become_user: root
